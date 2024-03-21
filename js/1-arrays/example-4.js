@@ -1,17 +1,35 @@
-// const month = new Array("10");
-// const monthLength = month.length;
+const container = document.querySelector(".js-list");
+const totalPrice = document.querySelector(".js-total-price");
+const clear = document.querySelector(".js-clear");
 
-// console.log(month); // [ '3' ]
-// console.log(monthLength); // 1
+const PRODUCT_LS = "basket";
+const products = JSON.parse(localStorage.getItem(PRODUCT_LS)) || [];
+let totalCost;
+if (product.length) {
+  clear.hidden = false;
+  totalCost = products.reduce((acc, { qty, price }) => (acc += qty * price), 0);
+}
+totalPrice.textContent = totalCost
+  ? `Total cost ${totalCost} грн.`
+  : `Your basket is empty`;
+container.insertAdjacentHTML("beforeend", createMarkup(products));
+clear.addEventListener("click", handleClear);
 
-//////////////////////////////
-// const month = new Array(null);
-// console.log(month); // [ null ]
-
-//////////////////////////////
-// const month = new Array(undefined);
-// console.log(month); // [ undefined ]
-
-//////////////////////////////
-const month = new Array(void 0);
-console.log(month); // [ undefined ]
+function handleClear() {
+  localStorage.removeItem(PRODUCT_LS);
+  window.location.href = "/03-shop.html";
+}
+function createMarkup(arr) {
+  return arr
+    .map(
+      ({ img, name, price, qty }) =>
+        `<li class="card-item">
+        <img src="${img}" alt="${name}" class="product-img">
+        <h2>${name}</h2>
+        <p>Quantity: ${qty}</p>
+        <p>total price: ${qty * price}</p>
+        </li>
+        `
+    )
+    .join("");
+}
